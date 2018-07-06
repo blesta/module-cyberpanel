@@ -320,9 +320,9 @@ class Cyberpanel extends Module
             foreach ($vars as $key => $value) {
                 if (in_array($key, $meta_fields)) {
                     $meta[] = [
-                        'key'=>$key,
-                        'value'=>$value,
-                        'encrypted'=>in_array($key, $encrypted_fields) ? 1 : 0
+                        'key' => $key,
+                        'value' => $value,
+                        'encrypted' => in_array($key, $encrypted_fields) ? 1 : 0
                     ];
                 }
             }
@@ -363,9 +363,9 @@ class Cyberpanel extends Module
             foreach ($vars as $key => $value) {
                 if (in_array($key, $meta_fields)) {
                     $meta[] = [
-                        'key'=>$key,
-                        'value'=>$value,
-                        'encrypted'=>in_array($key, $encrypted_fields) ? 1 : 0
+                        'key' => $key,
+                        'value' => $value,
+                        'encrypted' => in_array($key, $encrypted_fields) ? 1 : 0
                     ];
                 }
             }
@@ -439,7 +439,11 @@ class Cyberpanel extends Module
         $domain = $fields->label(Language::_('Cyberpanel.service_field.domain', true), 'cyberpanel_domain');
         // Create domain field and attach to domain label
         $domain->attach(
-            $fields->fieldText('cyberpanel_domain', $this->Html->ifSet($vars->cyberpanel_domain), ['id'=>'cyberpanel_domain'])
+            $fields->fieldText(
+                'cyberpanel_domain',
+                $this->Html->ifSet($vars->cyberpanel_domain),
+                ['id' => 'cyberpanel_domain']
+            )
         );
         // Set the label as a field
         $fields->setField($domain);
@@ -448,7 +452,11 @@ class Cyberpanel extends Module
         $username = $fields->label(Language::_('Cyberpanel.service_field.username', true), 'cyberpanel_username');
         // Create username field and attach to username label
         $username->attach(
-            $fields->fieldText('cyberpanel_username', $this->Html->ifSet($vars->cyberpanel_username), ['id'=>'cyberpanel_username'])
+            $fields->fieldText(
+                'cyberpanel_username',
+                $this->Html->ifSet($vars->cyberpanel_username),
+                ['id' => 'cyberpanel_username']
+            )
         );
         // Add tooltip
         $tooltip = $fields->tooltip(Language::_('Cyberpanel.service_field.tooltip.username', true));
@@ -522,7 +530,11 @@ class Cyberpanel extends Module
         $domain = $fields->label(Language::_('Cyberpanel.service_field.domain', true), 'cyberpanel_domain');
         // Create domain field and attach to domain label
         $domain->attach(
-            $fields->fieldText('cyberpanel_domain', $this->Html->ifSet($vars->cyberpanel_domain), ['id'=>'cyberpanel_domain'])
+            $fields->fieldText(
+                'cyberpanel_domain',
+                $this->Html->ifSet($vars->cyberpanel_domain),
+                ['id' => 'cyberpanel_domain']
+            )
         );
         // Set the label as a field
         $fields->setField($domain);
@@ -531,7 +543,11 @@ class Cyberpanel extends Module
         $username = $fields->label(Language::_('Cyberpanel.service_field.username', true), 'cyberpanel_username');
         // Create username field and attach to username label
         $username->attach(
-            $fields->fieldText('cyberpanel_username', $this->Html->ifSet($vars->cyberpanel_username), ['id'=>'cyberpanel_username'])
+            $fields->fieldText(
+                'cyberpanel_username',
+                $this->Html->ifSet($vars->cyberpanel_username),
+                ['id' => 'cyberpanel_username']
+            )
         );
         // Set the label as a field
         $fields->setField($username);
@@ -666,8 +682,13 @@ class Cyberpanel extends Module
      * @see Module::getModule()
      * @see Module::getModuleRow()
      */
-    public function addService($package, array $vars = null, $parent_package = null, $parent_service = null, $status = 'pending')
-    {
+    public function addService(
+        $package,
+        array $vars = null,
+        $parent_package = null,
+        $parent_service = null,
+        $status = 'pending'
+    ) {
         $row = $this->getModuleRow();
 
         if (!$row) {
@@ -678,7 +699,12 @@ class Cyberpanel extends Module
             return;
         }
 
-        $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password, $row->meta->use_ssl);
+        $api = $this->getApi(
+            $row->meta->host_name,
+            $row->meta->admin_username,
+            $row->meta->admin_password,
+            $row->meta->use_ssl
+        );
 
         // Generate username/password
         if (array_key_exists('cyberpanel_domain', $vars)) {
@@ -769,7 +795,12 @@ class Cyberpanel extends Module
     public function editService($package, $service, array $vars = null, $parent_package = null, $parent_service = null)
     {
         $row = $this->getModuleRow();
-        $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password, $row->meta->use_ssl);
+        $api = $this->getApi(
+            $row->meta->host_name,
+            $row->meta->admin_username,
+            $row->meta->admin_password,
+            $row->meta->use_ssl
+        );
 
         $this->validateServiceEdit($service, $vars);
 
@@ -847,12 +878,22 @@ class Cyberpanel extends Module
     public function suspendService($package, $service, $parent_package = null, $parent_service = null)
     {
         if (($row = $this->getModuleRow())) {
-            $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password, $row->meta->use_ssl);
+            $api = $this->getApi(
+                $row->meta->host_name,
+                $row->meta->admin_username,
+                $row->meta->admin_password,
+                $row->meta->use_ssl
+            );
 
             $service_fields = $this->serviceFieldsToObject($service->fields);
 
             // Suspend CyberPanel account
-            $this->log($row->meta->host_name . '|submitWebsiteStatus', serialize($service_fields->cyberpanel_domain), 'input', true);
+            $this->log(
+                $row->meta->host_name . '|submitWebsiteStatus',
+                serialize($service_fields->cyberpanel_domain),
+                'input',
+                true
+            );
             $this->parseResponse($api->suspendAccount($service_fields->cyberpanel_domain));
         }
 
@@ -880,12 +921,22 @@ class Cyberpanel extends Module
     public function unsuspendService($package, $service, $parent_package = null, $parent_service = null)
     {
         if (($row = $this->getModuleRow())) {
-            $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password, $row->meta->use_ssl);
+            $api = $this->getApi(
+                $row->meta->host_name,
+                $row->meta->admin_username,
+                $row->meta->admin_password,
+                $row->meta->use_ssl
+            );
 
             $service_fields = $this->serviceFieldsToObject($service->fields);
 
             // Unsuspend CyberPanel account
-            $this->log($row->meta->host_name . '|submitWebsiteStatus', serialize($service_fields->cyberpanel_domain), 'input', true);
+            $this->log(
+                $row->meta->host_name . '|submitWebsiteStatus',
+                serialize($service_fields->cyberpanel_domain),
+                'input',
+                true
+            );
             $this->parseResponse($api->unsuspendAccount($service_fields->cyberpanel_domain));
         }
 
@@ -913,12 +964,22 @@ class Cyberpanel extends Module
     public function cancelService($package, $service, $parent_package = null, $parent_service = null)
     {
         if (($row = $this->getModuleRow())) {
-            $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password, $row->meta->use_ssl);
+            $api = $this->getApi(
+                $row->meta->host_name,
+                $row->meta->admin_username,
+                $row->meta->admin_password,
+                $row->meta->use_ssl
+            );
 
             $service_fields = $this->serviceFieldsToObject($service->fields);
 
             // Delete CyberPanel account
-            $this->log($row->meta->host_name . '|deleteWebsite', serialize($service_fields->cyberpanel_domain), 'input', true);
+            $this->log(
+                $row->meta->host_name . '|deleteWebsite',
+                serialize($service_fields->cyberpanel_domain),
+                'input',
+                true
+            );
             $this->parseResponse($api->deleteAccount($service_fields->cyberpanel_domain));
 
             // Update the number of accounts on the server
@@ -947,16 +1008,33 @@ class Cyberpanel extends Module
      * @see Module::getModule()
      * @see Module::getModuleRow()
      */
-    public function changeServicePackage($package_from, $package_to, $service, $parent_package = null, $parent_service = null)
-    {
+    public function changeServicePackage(
+        $package_from,
+        $package_to,
+        $service,
+        $parent_package = null,
+        $parent_service = null
+    ) {
         if (($row = $this->getModuleRow())) {
-            $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password, $row->meta->use_ssl);
+            $api = $this->getApi(
+                $row->meta->host_name,
+                $row->meta->admin_username,
+                $row->meta->admin_password,
+                $row->meta->use_ssl
+            );
 
             $service_fields = $this->serviceFieldsToObject($service->fields);
 
             // Update the CyberPanel account
-            $this->log($row->meta->host_name . '|changePackageAPI', serialize([$service_fields->cyberpanel_domain, $package_to->meta->package]), 'input', true);
-            $this->parseResponse($api->updateAccountPackage($service_fields->cyberpanel_domain, $package_to->meta->package));
+            $this->log(
+                $row->meta->host_name . '|changePackageAPI',
+                serialize([$service_fields->cyberpanel_domain, $package_to->meta->package]),
+                'input',
+                true
+            );
+            $this->parseResponse(
+                $api->updateAccountPackage($service_fields->cyberpanel_domain, $package_to->meta->package)
+            );
         }
 
         return null;
@@ -1210,7 +1288,7 @@ class Cyberpanel extends Module
         $pool_size = strlen($pool);
 
         if ($length < 5) {
-            for ($i=$length; $i < 8; $i++) {
+            for ($i = $length; $i < 8; $i++) {
                 $username .= substr($pool, mt_rand(0, $pool_size - 1), 1);
             }
             $length = strlen($username);
@@ -1227,7 +1305,7 @@ class Cyberpanel extends Module
 
         // Username exists, create another instead
         if ($api->accountExists($username)) {
-            for ($i=0; $i < (int) str_repeat(9, $account_matching_characters); $i++) {
+            for ($i = 0; $i < (int) str_repeat(9, $account_matching_characters); $i++) {
                 $new_username = substr($username, 0, -$account_matching_characters) . $i;
                 if (!$api->accountExists($new_username)) {
                     $username = $new_username;
@@ -1253,7 +1331,7 @@ class Cyberpanel extends Module
         $length = mt_rand(max($min_length, 5), min($max_length, 14));
         $password = '';
 
-        for ($i=0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; $i++) {
             $password .= substr($pool, mt_rand(0, $pool_size - 1), 1);
         }
 
@@ -1353,57 +1431,57 @@ class Cyberpanel extends Module
     private function getRowRules(&$vars)
     {
         $rules = [
-            'server_name'=>[
-                'valid'=>[
-                    'rule'=>'isEmpty',
-                    'negate'=>true,
-                    'message'=>Language::_('Cyberpanel.!error.server_name_valid', true)
+            'server_name' => [
+                'valid' => [
+                    'rule' => 'isEmpty',
+                    'negate' => true,
+                    'message' => Language::_('Cyberpanel.!error.server_name_valid', true)
                 ]
             ],
-            'host_name'=>[
-                'valid'=>[
-                    'rule'=>[[$this, 'validateHostName']],
-                    'message'=>Language::_('Cyberpanel.!error.host_name_valid', true)
+            'host_name' => [
+                'valid' => [
+                    'rule' => [[$this, 'validateHostName']],
+                    'message' => Language::_('Cyberpanel.!error.host_name_valid', true)
                 ]
             ],
-            'admin_username'=>[
-                'valid'=>[
-                    'rule'=>'isEmpty',
-                    'negate'=>true,
-                    'message'=>Language::_('Cyberpanel.!error.remote_admin_username_valid', true)
+            'admin_username' => [
+                'valid' => [
+                    'rule' => 'isEmpty',
+                    'negate' => true,
+                    'message' => Language::_('Cyberpanel.!error.remote_admin_username_valid', true)
                 ]
             ],
-            'admin_password'=>[
-                'valid'=>[
-                    'last'=>true,
-                    'rule'=>'isEmpty',
-                    'negate'=>true,
-                    'message'=>Language::_('Cyberpanel.!error.remote_admin_password_valid', true)
+            'admin_password' => [
+                'valid' => [
+                    'last' => true,
+                    'rule' => 'isEmpty',
+                    'negate' => true,
+                    'message' => Language::_('Cyberpanel.!error.remote_admin_password_valid', true)
                 ],
-                'valid_connection'=>[
+                'valid_connection' => [
                     'rule' => [
                         [$this, 'validateConnection'],
                         $vars['host_name'],
                         $vars['admin_username'],
                         $vars['use_ssl']
                     ],
-                    'message'=>Language::_('Cyberpanel.!error.remote_admin_password_valid_connection', true)
+                    'message' => Language::_('Cyberpanel.!error.remote_admin_password_valid_connection', true)
                 ]
             ],
-            'account_limit'=>[
-                'valid'=>[
-                    'rule'=>['matches', '/^([0-9]+)?$/'],
-                    'message'=>Language::_('Cyberpanel.!error.account_limit_valid', true)
+            'account_limit' => [
+                'valid' => [
+                    'rule' => ['matches', '/^([0-9]+)?$/'],
+                    'message' => Language::_('Cyberpanel.!error.account_limit_valid', true)
                 ]
             ],
-            'name_servers'=>[
-                'count'=>[
-                    'rule'=>[[$this, 'validateNameServerCount']],
-                    'message'=>Language::_('Cyberpanel.!error.name_servers_count', true)
+            'name_servers' => [
+                'count' => [
+                    'rule' => [[$this, 'validateNameServerCount']],
+                    'message' => Language::_('Cyberpanel.!error.name_servers_count', true)
                 ],
-                'valid'=>[
-                    'rule'=>[[$this, 'validateNameServers']],
-                    'message'=>Language::_('Cyberpanel.!error.name_servers_valid', true)
+                'valid' => [
+                    'rule' => [[$this, 'validateNameServers']],
+                    'message' => Language::_('Cyberpanel.!error.name_servers_valid', true)
                 ]
             ]
         ];
