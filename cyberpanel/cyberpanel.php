@@ -4,7 +4,7 @@
  *
  * @package blesta
  * @subpackage blesta.components.modules.cyberpanel
- * @copyright Copyright (c) 2010, Phillips Data, Inc.
+ * @copyright Copyright (c) 2018, Phillips Data, Inc.
  * @license http://www.blesta.com/license/ The Blesta License Agreement
  * @link http://www.blesta.com/ Blesta
  */
@@ -303,7 +303,7 @@ class Cyberpanel extends Module
     public function addModuleRow(array &$vars)
     {
         $meta_fields = ['server_name', 'host_name', 'admin_username', 'admin_password',
-            'use_ssl', 'account_limit', 'name_servers', 'notes'];
+            'use_ssl',  'name_servers', 'notes'];
         $encrypted_fields = ['admin_password'];
 
         // Set unspecified checkboxes
@@ -346,7 +346,7 @@ class Cyberpanel extends Module
     public function editModuleRow($module_row, array &$vars)
     {
         $meta_fields = ['server_name', 'host_name', 'admin_username', 'admin_password',
-            'use_ssl', 'account_limit', 'account_count', 'name_servers', 'notes'];
+            'use_ssl', 'name_servers', 'notes'];
         $encrypted_fields = ['admin_password'];
 
         // Set unspecified checkboxes
@@ -372,17 +372,6 @@ class Cyberpanel extends Module
 
             return $meta;
         }
-    }
-
-    /**
-     * Deletes the module row on the remote server. Sets Input errors on failure,
-     * preventing the row from being deleted.
-     *
-     * @param stdClass $module_row The stdClass representation of the existing module row
-     */
-    public function deleteModuleRow($module_row)
-    {
-        // Nothing to do
     }
 
     /**
@@ -744,14 +733,11 @@ class Cyberpanel extends Module
             $masked_params['password'] = '***';
             $this->log($row->meta->host_name . '|createWebsite', serialize($masked_params), 'input', true);
             unset($masked_params);
-            $result = $this->parseResponse($api->createAccount($params));
+            $this->parseResponse($api->createAccount($params));
 
             if ($this->Input->errors()) {
                 return;
             }
-
-            // Update the number of accounts on the server
-            $this->updateAccountCount($row);
         }
 
         // Return service fields
@@ -833,7 +819,7 @@ class Cyberpanel extends Module
             // Update password (if changed)
             if (isset($delta['cyberpanel_password'])) {
                 $this->log($row->meta->host_name . '|changeUserPassAPI', '***', 'input', true);
-                $result = $this->parseResponse(
+                $this->parseResponse(
                     $api->updateAccountPassword($service_fields->cyberpanel_username, $delta['cyberpanel_password'])
                 );
             }
@@ -981,9 +967,6 @@ class Cyberpanel extends Module
                 true
             );
             $this->parseResponse($api->deleteAccount($service_fields->cyberpanel_domain));
-
-            // Update the number of accounts on the server
-            $this->updateAccountCount($row, false);
         }
 
         return null;
@@ -1198,54 +1181,6 @@ class Cyberpanel extends Module
     }
 
     /**
-     * Retrieves the accounts on the server.
-     *
-     * @param stdClass $api The CyberPanel API
-     * @return mixed The number of CyberPanel accounts on the server, or false on error
-     */
-    private function getAccountCount($api)
-    {
-        $accounts = false;
-
-        // Get module row meta
-        $vars = $this->ModuleManager->getRowMeta($module_row->id);
-
-        // Update account count
-        $accounts = (int) $vars->account_count;
-
-        return $accounts;
-    }
-
-    /**
-     * Updates the module row meta number of accounts.
-     *
-     * @param stdClass $module_row A stdClass object representing a single server
-     * @param mixed $increase
-     */
-    private function updateAccountCount($module_row, $increase = true)
-    {
-        // Get module row meta
-        $vars = $this->ModuleManager->getRowMeta($module_row->id);
-
-        // Update account count
-        $count = (int) $vars->account_count;
-
-        if ($increase) {
-            $vars->account_count = $count + 1;
-        } else {
-            $vars->account_count = $count - 1;
-        }
-
-        if ($vars->account_count < 0) {
-            $vars->account_count = 0;
-        }
-
-        // Update the module row account list
-        $vars = (array) $vars;
-        $this->ModuleManager->editRow($module_row->id, $vars);
-    }
-
-    /**
      * Validates whether or not the connection details are valid by attempting to fetch
      * the number of accounts that currently reside on the server.
      *
@@ -1300,13 +1235,13 @@ class Cyberpanel extends Module
         $row = $this->getModuleRow();
 
         if ($row) {
-            $api = $this->getApi($row->meta->host_name, $row->meta->api_key, $row->meta->use_ssl);
+            $api = $this->getApi($row->meta->host_name, $row->meta->admin_username, $row->meta->admin_password);
         }
 
         // Username exists, create another instead
         if ($api->accountExists($username)) {
-            for ($i = 0; $i < (int) str_repeat(9, $account_matching_characters); $i++) {
-                $new_username = substr($username, 0, -$account_matching_characters) . $i;
+            for ($i = 0; $i < (int) str_repeat(9, 4); $i++) {
+                $new_username = substr($username, 0, -4) . $i;
                 if (!$api->accountExists($new_username)) {
                     $username = $new_username;
                     break;
@@ -1377,7 +1312,7 @@ class Cyberpanel extends Module
         }
 
         // Only some API requests return status, so only use it if its available
-        if ($response->error_message == !'None') {
+        if ($response->error_message !== 'None') {
             $this->Input->setErrors(['api' => ['result' => $response->error_message]]);
             $success = false;
         }
@@ -1466,12 +1401,6 @@ class Cyberpanel extends Module
                         $vars['use_ssl']
                     ],
                     'message' => Language::_('Cyberpanel.!error.remote_admin_password_valid_connection', true)
-                ]
-            ],
-            'account_limit' => [
-                'valid' => [
-                    'rule' => ['matches', '/^([0-9]+)?$/'],
-                    'message' => Language::_('Cyberpanel.!error.account_limit_valid', true)
                 ]
             ],
             'name_servers' => [
