@@ -185,7 +185,7 @@ class CyberpanelApi
             'package' => 'Default'
         ]);
 
-        if ((bool) $account->createWebSiteStatus) {
+        if (!$account || (bool) $account->createWebSiteStatus) {
             // We just want to check if the account exists, therefore we
             // will delete the previously created account.
             $this->deleteAccount($username . '.com');

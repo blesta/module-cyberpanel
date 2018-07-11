@@ -1309,10 +1309,8 @@ class Cyberpanel extends Module
         if (!$response) {
             $this->Input->setErrors(['api' => ['internal' => Language::_('Cyberpanel.!error.api.internal', true)]]);
             $success = false;
-        }
-
-        // Only some API requests return status, so only use it if its available
-        if ($response->error_message !== 'None') {
+        } elseif ($response->error_message !== 'None') {
+            // Only some API requests return status, so only use it if its available
             $this->Input->setErrors(['api' => ['result' => $response->error_message]]);
             $success = false;
         }
