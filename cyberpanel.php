@@ -1239,10 +1239,10 @@ class Cyberpanel extends Module
         }
 
         // Username exists, create another instead
-        if ($api->accountExists($username)) {
+        if ($this->parseResponse($api->getUserInfo($username))) {
             for ($i = 0; $i < (int) str_repeat(9, 4); $i++) {
                 $new_username = substr($username, 0, -4) . $i;
-                if (!$api->accountExists($new_username)) {
+                if (!$this->parseResponse($api->getUserInfo($new_username))) {
                     $username = $new_username;
                     break;
                 }
