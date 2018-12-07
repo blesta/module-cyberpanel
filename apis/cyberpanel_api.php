@@ -167,32 +167,17 @@ class CyberpanelApi
     }
 
     /**
-     * Check if an account exists.
+     * Get the info for the given user
      *
      * @param string $username The username of the account
-     * @return bool True if the account exists, false otherwise
+     * @return mixed An stdClass object representing the user if it exists, false otherwise
      */
-    public function accountExists($username)
+    public function getUserInfo($username)
     {
-        // Because the CyberPanel API has no function to verify if an
-        // account exists, we will try to create an account, if the account
-        // is created means that the account does not exist.
-        $account = $this->createAccount([
-            'username' => $username,
-            'password' => base64_encode(mt_rand()),
-            'email' => $username . '@' . $username . '.mail',
-            'domain' => $username . '.com',
-            'package' => 'Default'
-        ]);
+        // Build the parameters array
+        $api_params = ['username' => $username];
+        $user = $this->apiRequest('getUserInfo', $api_params);
 
-        if (!$account || (bool) $account->createWebSiteStatus) {
-            // We just want to check if the account exists, therefore we
-            // will delete the previously created account.
-            $this->deleteAccount($username . '.com');
-
-            return false;
-        }
-
-        return true;
+        return $user;
     }
 }
