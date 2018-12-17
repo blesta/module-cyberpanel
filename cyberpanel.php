@@ -1142,7 +1142,7 @@ class Cyberpanel extends Module
 
         return $this->Input->matches(
             $host_name,
-            "/^([a-z0-9]|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9])(\.([a-z0-9]|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]))+$/"
+            "/^([a-z0-9]|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9])(\.([a-z0-9]|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]))+$/i"
         );
     }
 
@@ -1352,7 +1352,7 @@ class Cyberpanel extends Module
      */
     private function formatDomain($domain)
     {
-        return preg_replace('/^\s*www\./i', '', $domain);
+        return strtolower(preg_replace('/^\s*www\./i', '', $domain));
     }
 
     /**
