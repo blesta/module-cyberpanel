@@ -1,5 +1,4 @@
 <?php
-use Blesta\Core\Util\Validate\Server;
 /**
  * CyberPanel Module.
  *
@@ -1137,8 +1136,14 @@ class Cyberpanel extends Module
      */
     public function validateHostName($host_name)
     {
-        $validator = new Server();
-        return $validator->isDomain($host_name);
+        if (strlen($host_name) > 255) {
+            return false;
+        }
+
+        return $this->Input->matches(
+            $host_name,
+            "/^([a-z0-9]|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9])(\.([a-z0-9]|[a-z0-9][a-z0-9\-]{0,61}[a-z0-9]))+$/"
+        );
     }
 
     /**
