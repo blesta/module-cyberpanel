@@ -1347,7 +1347,7 @@ class Cyberpanel extends Module
      */
     private function formatDomain($domain)
     {
-        return preg_replace('/^\s*www\./i', '', $domain);
+        return strtolower(preg_replace('/^\s*www\./i', '', $domain));
     }
 
     /**
