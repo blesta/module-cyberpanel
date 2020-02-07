@@ -4,6 +4,7 @@
  */
 // Basics
 $lang['Cyberpanel.name'] = 'CyberPanel';
+$lang['Cyberpanel.description'] = 'CyberPanel is a next generation hosting control panel powered by OpenLiteSpeed. Built for speed, security, and reliability.';
 $lang['Cyberpanel.module_row'] = 'Server';
 $lang['Cyberpanel.module_row_plural'] = 'Servers';
 $lang['Cyberpanel.module_group'] = 'Server Group';
