@@ -1068,10 +1068,8 @@ class Cyberpanel extends Module
      */
     public function tabClientActions($package, $service, array $get = null, array $post = null, array $files = null)
     {
-        $row = $this->getModuleRow();
-        $api = $this->getApi($row->meta->host_name, $row->meta->api_key, $row->meta->use_ssl);
-
         $this->view = new View('tab_client_actions', 'default');
+        $this->view->base_uri = $this->base_uri;
 
         // Load the helpers required for this view
         Loader::loadHelpers($this, ['Form', 'Html']);
