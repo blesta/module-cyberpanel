@@ -101,7 +101,7 @@ class Cyberpanel extends Module
         $package->attach(
             $fields->fieldText(
                 'meta[package]',
-                $this->Html->ifSet($vars->meta['package']),
+                (isset($vars->meta['package']) ? $vars->meta['package'] : null),
                 ['id' => 'cyberpanel_package']
             )
         );
@@ -407,7 +407,7 @@ class Cyberpanel extends Module
         $domain->attach(
             $fields->fieldText(
                 'cyberpanel_domain',
-                $this->Html->ifSet($vars->cyberpanel_domain),
+                (isset($vars->cyberpanel_domain) ? $vars->cyberpanel_domain : null),
                 ['id' => 'cyberpanel_domain']
             )
         );
@@ -420,7 +420,7 @@ class Cyberpanel extends Module
         $username->attach(
             $fields->fieldText(
                 'cyberpanel_username',
-                $this->Html->ifSet($vars->cyberpanel_username),
+                (isset($vars->cyberpanel_username) ? $vars->cyberpanel_username : null),
                 ['id' => 'cyberpanel_username']
             )
         );
@@ -436,7 +436,7 @@ class Cyberpanel extends Module
         $password->attach(
             $fields->fieldPassword(
                 'cyberpanel_password',
-                ['id' => 'cyberpanel_password', 'value' => $this->Html->ifSet($vars->cyberpanel_password)]
+                ['id' => 'cyberpanel_password', 'value' => (isset($vars->cyberpanel_password) ? $vars->cyberpanel_password : null)]
             )
         );
         // Add tooltip
@@ -498,7 +498,7 @@ class Cyberpanel extends Module
         $domain->attach(
             $fields->fieldText(
                 'cyberpanel_domain',
-                $this->Html->ifSet($vars->cyberpanel_domain),
+                (isset($vars->cyberpanel_domain) ? $vars->cyberpanel_domain : null),
                 ['id' => 'cyberpanel_domain']
             )
         );
@@ -511,7 +511,7 @@ class Cyberpanel extends Module
         $username->attach(
             $fields->fieldText(
                 'cyberpanel_username',
-                $this->Html->ifSet($vars->cyberpanel_username),
+                (isset($vars->cyberpanel_username) ? $vars->cyberpanel_username : null),
                 ['id' => 'cyberpanel_username']
             )
         );
@@ -524,7 +524,7 @@ class Cyberpanel extends Module
         $password->attach(
             $fields->fieldPassword(
                 'cyberpanel_password',
-                ['id' => 'cyberpanel_password', 'value' => $this->Html->ifSet($vars->cyberpanel_password)]
+                ['id' => 'cyberpanel_password', 'value' => (isset($vars->cyberpanel_password) ? $vars->cyberpanel_password : null)]
             )
         );
         // Set the label as a field
@@ -1082,7 +1082,7 @@ class Cyberpanel extends Module
             if ($post['cyberpanel_password'] == $post['cyberpanel_confirm_password']) {
                 Loader::loadModels($this, ['Services']);
                 $data = [
-                    'cyberpanel_password' => $this->Html->ifSet($post['cyberpanel_password'])
+                    'cyberpanel_password' => (isset($post['cyberpanel_password']) ? $post['cyberpanel_password'] : null)
                 ];
                 $this->Services->edit($service->id, $data);
 
