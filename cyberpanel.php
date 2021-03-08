@@ -468,7 +468,7 @@ class Cyberpanel extends Module
         $domain->attach(
             $fields->fieldText(
                 'cyberpanel_domain',
-                $this->Html->ifSet($vars->cyberpanel_domain, $this->Html->ifSet($vars->domain)),
+                (isset($vars->cyberpanel_domain) ? $vars->cyberpanel_domain : ($vars->domain ?? null)),
                 ['id' => 'cyberpanel_domain']
             )
         );
