@@ -15,30 +15,30 @@
                     <li>
                         <?php
                         $this->Form->label($this->_('Cyberpanel.row_meta.server_name', true), 'server_name');
-                        $this->Form->fieldText('server_name', $this->Html->ifSet($vars->server_name));
+                        $this->Form->fieldText('server_name', (isset($vars->server_name) ? $vars->server_name : null));
                         ?>
                     </li>
                     <li>
                         <?php
                         $this->Form->label($this->_('Cyberpanel.row_meta.host_name', true), 'host_name');
-                        $this->Form->fieldText('host_name', $this->Html->ifSet($vars->host_name));
+                        $this->Form->fieldText('host_name', (isset($vars->host_name) ? $vars->host_name : null));
                         ?>
                     </li>
                     <li>
                         <?php
                         $this->Form->label($this->_('Cyberpanel.row_meta.admin_username', true), 'admin_username');
-                        $this->Form->fieldText('admin_username', $this->Html->ifSet($vars->admin_username));
+                        $this->Form->fieldText('admin_username', (isset($vars->admin_username) ? $vars->admin_username : null));
                         ?>
                     </li>
                     <li>
                         <?php
                         $this->Form->label($this->_('Cyberpanel.row_meta.admin_password', true), 'admin_password');
-                        $this->Form->fieldText('admin_password', $this->Html->ifSet($vars->admin_password));
+                        $this->Form->fieldText('admin_password', (isset($vars->admin_password) ? $vars->admin_password : null));
                         ?>
                     </li>
                     <li>
                         <?php
-                        $this->Form->fieldCheckbox('use_ssl', 'true', $this->Html->ifSet($vars->use_ssl, 'true') == 'true', ['id' => 'use_ssl']);
+                        $this->Form->fieldCheckbox('use_ssl', 'true', (isset($vars->use_ssl) ? $vars->use_ssl : 'true') == 'true', ['id' => 'use_ssl']);
                         $this->Form->label($this->_('Cyberpanel.row_meta.use_ssl', true), 'use_ssl', ['class' => 'inline']);
                         ?>
                     </li>
@@ -62,12 +62,12 @@
                     </thead>
                     <tbody>
                         <?php
-                        $num_servers = count($this->Html->ifSet($vars->name_servers, []));
+                        $num_servers = count((isset($vars->name_servers) ? $vars->name_servers : []));
                         for ($i = 0; $i < max(2, $num_servers); $i++) {
                             ?>
                         <tr class="ns_row<?php echo ($i % 2 == 1) ? ' odd_row' : ''; ?>">
                             <td><?php $this->_('Cyberpanel.add_row.name_server', false, '<span>' . ($i + 1) . '</span>'); ?></td>
-                            <td><?php $this->Form->fieldText('name_servers[]', $this->Html->ifSet($vars->name_servers[$i])); ?></td>
+                            <td><?php $this->Form->fieldText('name_servers[]', (isset($vars->name_servers[$i]) ? $vars->name_servers[$i] : null)); ?></td>
                             <td><a href="#" class="manage ns_row_remove"><?php $this->_('Cyberpanel.add_row.remove_name_server'); ?></a></td>
                         </tr>
                         <?php
@@ -84,7 +84,7 @@
                 <ul>
                     <li>
                         <?php
-                        $this->Form->fieldTextarea('notes', $this->Html->ifSet($vars->notes));
+                        $this->Form->fieldTextarea('notes', (isset($vars->notes) ? $vars->notes : null));
                         ?>
                     </li>
                 </ul>
