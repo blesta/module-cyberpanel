@@ -37,3 +37,4 @@ your Blesta installation path.
 |< v4.2.0|N/A|
 |>= v4.2.0|v1.2.0+|
 |>= v4.9.0|v2.3.0+|
+|>= v5.0.0|v2.5.0+|
