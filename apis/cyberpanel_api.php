@@ -1,4 +1,6 @@
 <?php
+use Blesta\Core\Util\Common\Traits\Container;
+
 /**
  * CyberPanel API.
  *
@@ -10,6 +12,9 @@
  */
 class CyberpanelApi
 {
+    // Load traits
+    use Container;
+
     /**
      * @var string The CyberPanel hostname
      */
@@ -44,6 +49,10 @@ class CyberpanelApi
         $this->username = $username;
         $this->password = $password;
         $this->use_ssl = $use_ssl;
+
+        // Initialize logger
+        $logger = $this->getFromContainer('logger');
+        $this->logger = $logger;
     }
 
     /**
@@ -76,12 +85,26 @@ class CyberpanelApi
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
         curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $data = json_decode(curl_exec($ch));
+
+        if (Configure::get('Blesta.curl_verify_ssl')) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        } else {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        }
+
+        $result = curl_exec($ch);
+
+        if ($result == false) {
+            $this->logger->error(curl_error($ch));
+        } else {
+            $data = json_decode($result);
+        }
+
         curl_close($ch);
 
-        return $data;
+        return $data ?? null;
     }
 
     /**
