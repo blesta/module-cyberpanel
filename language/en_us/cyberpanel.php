@@ -10,6 +10,8 @@ $lang['Cyberpanel.module_row_plural'] = 'Servers';
 $lang['Cyberpanel.module_group'] = 'Server Group';
 $lang['Cyberpanel.tab_client_actions'] = 'Actions';
 
+$lang['Cyberpanel.back_to_manage'] = 'Back';
+
 // Module management
 $lang['Cyberpanel.add_module_row'] = 'Add Server';
 $lang['Cyberpanel.add_module_group'] = 'Add Server Group';
