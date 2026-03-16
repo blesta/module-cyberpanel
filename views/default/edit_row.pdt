@@ -125,8 +125,9 @@ $this->Widget->create($this->_('Cyberpanel.edit_row.box_title', true));
         ]); ?>
     </div>
 
-                        <?php $this->Form->end(); ?>
-                        <?php $this->Widget->end(); ?>
+<?php $this->Form->end(); ?>
+<?php $this->Widget->end(); ?>
+
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
         // Add a row
@@ -140,22 +141,20 @@ $this->Widget->create($this->_('Cyberpanel.edit_row.box_title', true));
             ns_rows[ns_rows.length - 1].insertAdjacentElement('afterend', fields);
             return false;
         });
-        // Remove a row
-        document.querySelector('.ns_row_remove').addEventListener('click', function() {
-            if (document.querySelectorAll('tr.ns_row').length > 1) {
-                this.closest('tr').remove();
-                // Reorder the counts for these rows
-                var i = 1;
-                document.querySelectorAll('tr.ns_row').forEach(function(row) {
-                    row.querySelector('td:first-child span').textContent = i++;
-                });
+        // Remove a row - event delegation for dynamic rows
+        document.querySelector('tbody').addEventListener('click', function(e) {
+            var removeLink = e.target.closest('.ns_row_remove');
+            if (removeLink) {
+                e.preventDefault();
+                if (document.querySelectorAll('tr.ns_row').length > 1) {
+                    removeLink.closest('tr').remove();
+                    // Reorder the counts for these rows
+                    var i = 1;
+                    document.querySelectorAll('tr.ns_row').forEach(function(row) {
+                        row.querySelector('td:first-child span').textContent = i++;
+                    });
+                }
             }
-            return false;
         });
     });
-
-    function updateNsRows() {
-        // BS5 table-striped handles zebra striping automatically
-    });
-    }
 </script>
