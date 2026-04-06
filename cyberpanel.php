@@ -1181,13 +1181,18 @@ class Cyberpanel extends Module
     {
         try {
             $api = $this->getApi($hostname, $admin_username, $admin_password, $use_ssl);
+
+            $this->log($hostname . '|verifyConn', serialize(['adminUser' => $admin_username]), 'input', true);
             $response = $api->apiRequest('verifyConn');
 
-            if (!empty($response)) {
+            $success = !empty($response);
+            $this->log($hostname, serialize($response), 'output', $success);
+
+            if ($success) {
                 return true;
             }
         } catch (\Throwable $e) {
-            // Trap any errors encountered, could not validate connection
+            $this->log($hostname . '|verifyConn', serialize($e->getMessage()), 'output', false);
         }
 
         return false;
