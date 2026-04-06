@@ -27,18 +27,18 @@
                 $this->Form->create(
                     $this->Html->safe(
                         'https://' .
-                            (isset($module_row->meta->host_name) ? $module_row->meta->host_name : null) .
+                            ($module_row->meta->host_name ?? null) .
                             ':8090/api/loginAPI',
                     ),
                     ['target' => '_blank'],
                 );
                 $this->Form->fieldHidden(
                     'username',
-                    isset($service_fields->cyberpanel_username) ? $service_fields->cyberpanel_username : null,
+                    $service_fields->cyberpanel_username ?? null,
                 );
                 $this->Form->fieldHidden(
                     'password',
-                    isset($service_fields->cyberpanel_password) ? $service_fields->cyberpanel_password : null,
+                    $service_fields->cyberpanel_password ?? null,
                 );
                 $this->Form->fieldHidden('commit', 'Login');
                 ?>
