@@ -34,5 +34,8 @@
             "cyberpanel_password"
         ]
     },
-    "icon": "bi-server"
+    "logo": {
+        "light": "views/default/images/logo.png",
+        "dark": "views/default/images/logo-dark.png"
+    }
 }
